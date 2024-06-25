@@ -42,7 +42,7 @@ function fish_prompt --description 'Write out the prompt'
 		if test "$color[$i]" = "brblack"
 			set_color "$color[$i]"
 		else
-			set_color --dim --bold "$color[$i]"
+			set_color --bold "$color[$i]"
 		end
 		string repeat -Nn "$line_len[$i]" '_'
 		set_color normal
@@ -54,7 +54,7 @@ function fish_prompt --description 'Write out the prompt'
 		if test "$color[$i]" = "brblack"
 			set_color "$color[$i]"
 		else
-			set_color --dim "$color[$i]"
+			set_color "$color[$i]"
 		end
 		echo -n "$prompt[$i]"
 		set_color normal
