@@ -51,11 +51,7 @@ function fish_prompt --description 'Write out the prompt'
 	echo
 
 	for i in (seq (count $color))
-		if test "$color[$i]" = "brblack"
-			set_color "$color[$i]"
-		else
-			set_color "$color[$i]"
-		end
+		set_color "$color[$i]"
 		echo -n "$prompt[$i]"
 		set_color normal
 	end
