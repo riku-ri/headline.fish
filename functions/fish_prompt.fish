@@ -63,10 +63,12 @@ function fish_prompt --description 'Write out the prompt'
 		echo -n -s "[$(string join '|' $last_pipestatus)]"
 	end
 
+	#set -l suffix '🗔' # Window unicode
 	set -l suffix '$'
-	if functions -q fish_is_root_user; and fish_is_root_user
-		set -l suffix '#'
-	end
+	# Can not detact root
+	#if functions -q fish_is_root_user; and fish_is_root_user
+	#	set -l suffix '#'
+	#end
 	echo -n -s "$suffix" ' '
 	set_color normal
 end
