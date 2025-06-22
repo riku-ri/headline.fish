@@ -27,8 +27,8 @@ function fish_prompt --description 'Write out the prompt'
 		(string length "$hostname")     \
 		(string length ":")             \
 		(string length "$(prompt_pwd)")
-	set -l empty_len (math $(stty size | cut -d ' ' -f2) - $(string join '-' $line_len) - (string trim "$(fish_vcs_prompt)" | string length))
-	set -l line_len $line_len "$empty_len" (string trim "$(fish_vcs_prompt)" | string length)
+	set -l empty_len (math $(stty size | cut -d ' ' -f2) - $(string join '-' $line_len) - $(string trim "$(fish_vcs_prompt)" | string length))
+	set -l line_len $line_len "$empty_len" $(string trim "$(fish_vcs_prompt)" | string length)
 
 	set -l prompt \
 		"$USER" \
@@ -36,7 +36,10 @@ function fish_prompt --description 'Write out the prompt'
 		"$hostname" \
 		":" \
 		"$(prompt_pwd)"
-	set -l prompt $prompt "$(string repeat -Nn $empty_len ' ')" (string trim "$(fish_vcs_prompt)")
+	
+	if test $empty_len -ge 0
+		set prompt $prompt "$(string repeat -Nn $empty_len ' ')" $(string trim "$(fish_vcs_prompt)")
+	end
 
 	for i in (seq (count $color))
 		if test "$color[$i]" = "brblack"
@@ -44,7 +47,9 @@ function fish_prompt --description 'Write out the prompt'
 		else
 			set_color --bold "$color[$i]"
 		end
-		string repeat -Nn "$line_len[$i]" '_'
+		if test $empty_len -ge 0
+			string repeat -Nn "$line_len[$i]" '_'
+		end
 		set_color normal
 	end
 
@@ -63,12 +68,10 @@ function fish_prompt --description 'Write out the prompt'
 		echo -n -s "[$(string join '|' $last_pipestatus)]"
 	end
 
-	#set -l suffix '🗔' # Window unicode
 	set -l suffix '$'
-	# Can not detact root
-	#if functions -q fish_is_root_user; and fish_is_root_user
-	#	set -l suffix '#'
-	#end
+	if functions -q fish_is_root_user; and fish_is_root_user
+		set -l suffix '#'
+	end
 	echo -n -s "$suffix" ' '
 	set_color normal
 end
